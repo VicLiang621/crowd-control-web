@@ -1,4 +1,5 @@
-var username = require('os').userInfo().username;
+// var username = require('os').userInfo().username;
+var username = 'test'
 var options = {
     development: {
         client: 'pg',
