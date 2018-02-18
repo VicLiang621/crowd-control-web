@@ -35,5 +35,8 @@
     "pg": "7.4.1",
     "pg-format": "^1.0.4",
     "socket.io": "^2.0.4"
-  }
+  },
+  "scripts": {
+    "test": "mocha server/tests/unittests.js --exit"
+    }
 }
