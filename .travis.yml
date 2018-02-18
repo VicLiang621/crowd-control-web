@@ -5,8 +5,8 @@ services:
 
 before_script:
     -psql -c 'create database test;' -U postgres
-    -node models/db.js
-    -node helper/populatedb.js
+    -node server/models/db.js
+    -node serer/helper/populatedb.js
 
 script:
     -mocha unittests.js --exit
