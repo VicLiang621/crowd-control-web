@@ -21,7 +21,7 @@ var options = {
       },
       test: {
           client: 'pg',
-          connection: 'postgres://postgres:5432@localhost/test',
+          connection: 'postgres://postgres@localhost/test',
           pool: {
               min: 1,
               max: 3
