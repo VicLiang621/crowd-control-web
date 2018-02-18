@@ -100,7 +100,9 @@ function incrementCount(location_name, count){
    });
 }
 
+console.log("Going to create database");
 createDefaultTable();
+console.log("Created database relations");
 knex.destroy();
 module.exports.getCountAtLocation = getCountAtLocation;
 module.exports.getHistoricalForLocation = getHistoricalForLocation;
