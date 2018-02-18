@@ -6,4 +6,4 @@ services:
     - postgresql
 
 script:
-    -mocha unittests.js --exit
+    -mocha server/tests/unittests.js --exit
