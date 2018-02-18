@@ -101,6 +101,7 @@ function incrementCount(location_name, count){
 }
 
 createDefaultTable();
+knex.destroy();
 module.exports.getCountAtLocation = getCountAtLocation;
 module.exports.getHistoricalForLocation = getHistoricalForLocation;
 module.exports.getHistoricalDailyForLocation = getHistoricalDailyForLocation;
