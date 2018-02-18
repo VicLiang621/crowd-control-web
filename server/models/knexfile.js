@@ -31,4 +31,5 @@ var options = {
 
 var environment = process.env.NODE_ENV || 'development';
 var config = options[environment];
+console.og("Chose config ", config);
 module.exports = require('knex')(config);
