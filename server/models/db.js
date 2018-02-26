@@ -48,11 +48,12 @@ function getHistoricalForLocation(location_name) {
         var historical = knex('historical_data').select()
         .where('location_name', '=', location_name)
         .andWhere('date', '>', date)
-        .then()
+        .then(data => {
+            resolve(data);
+        })
         .catch(function(e){
             reject(e);
         })
-        return resolve(historical);
     });
 }
 

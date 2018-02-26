@@ -56,7 +56,9 @@ app.get('/api/test', (req, res) => {
 // get the count at a certain location (for example, /count/Marino)
 app.get('/count/:location', async (req, res) => {
     var count = await db.getCountAtLocation(req.params.location).then();
+    console.log("count is ", count);
     var historical = await db.getHistoricalForLocation(req.params.location).then();
+    console.log("historical is ", historical);
     var dailyAverages = parser.getDailyAverages(historical);
     count[0]['graphData'] = dailyAverages;
     res.send(count);
