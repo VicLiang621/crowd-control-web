@@ -21,7 +21,7 @@ var options = {
       },
       test: {
           client: 'pg',
-          connection: 'postgres://postgres@localhost/test',
+          connection: 'postgres://postgres:5432@localhost/test',
           pool: {
               min: 1,
               max: 3
@@ -31,5 +31,5 @@ var options = {
 
 var environment = process.env.NODE_ENV || 'development';
 var config = options[environment];
-console.log("Chose config ", config);
+console.log("config is ", config);
 module.exports = require('knex')(config);
