@@ -27,18 +27,6 @@ function createDefaultTable(){
     });
 }
 
-
-
-return new Promise(async (resolve, reject) => {
-    knex('historical_data').insert({'location_name':location_name, 'count': count, 'date':date})
-    .then()
-    .catch(function(e){
-        console.log(e);
-    })
-    var updatedCount = await incrementCount(location_name, count);
-    return resolve({'count':updatedCount[0]});
-});
-
 // get current "people count" of a location
 function getCountAtLocation(location_name) {
     return new Promise(async (resolve, reject) => {
