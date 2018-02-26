@@ -9,6 +9,7 @@ var conString = process.env.DB_URL || "postgres://postgres:5432@localhost/" + us
 function createDefaultTable(){
 
     knex.schema.withSchema('public').createTableIfNotExists('historical_data', function(table){
+        console.log("creating table");
         table.increments('id');
         table.string('location_name', 100);
         table.integer('count');
@@ -182,7 +183,7 @@ function incrementCount(location_name, count){
 console.log("Going to create database");
 createDefaultTable();
 console.log("Created database relations");
-knex.close();
+knex.destroy();
 module.exports.getCountAtLocation = getCountAtLocation;
 module.exports.getHistoricalForLocation = getHistoricalForLocation;
 module.exports.getHistoricalGraphData = getHistoricalGraphData;

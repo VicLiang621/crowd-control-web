@@ -74,4 +74,4 @@ clearTable();
 console.log("Going to populate database");
 populatedb();
 console.log("Database is populated");
-pg.close(); //Close connection
+pg.destroy(); //Close connection
