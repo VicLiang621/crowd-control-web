@@ -29,11 +29,57 @@ class Location extends Component {
   }
 
   componentDidUpdate() {
-    console.log("Retrieving " + this.state.granularity + " data for " + this.state.startingDate + " to " + this.state.endingDate)
+  }
 
-    // TODO call function to query database
+updateGraph() {
+  this.callGraphApi();
+}
 
+  callGraphApi = async () => {
+    const graphJSON = {"location": this.state.name, "type": this.state.granularity.toLowerCase(), "startDate": this.state.startingDate, "endDate": this.state.endingDate};
+    var jsonString = JSON.stringify(graphJSON)
 
+    const response = await fetch('/data/' + jsonString);
+    const body = await response.json();
+    console.log(body) 
+    this.buildGraph(body)  
+  }
+
+  buildGraph(data){
+    var newValues = []
+    var newFormat = []
+    var newGraphData = []
+    var accessor;
+
+    if (this.state.granularity === "Weekly") {
+      accessor = "Week";
+    }
+    else if (this.state.granularity === "Monthly") {
+      accessor = "Month";
+    }
+    else if (this.state.granularity === "Yearly") {
+      accessor = "Year";
+    }
+    else {
+      accessor = "Day";
+    }
+
+    for(var i = 0; i < data.length; i++) {
+      var row = data[i];
+      var x_axis = row[accessor];
+      var visitors = row.visitors;
+      newFormat.push(String(x_axis.slice(0,10)))
+      newGraphData.push(Number(visitors))
+      newValues.push(i)
+    }
+
+    if (this.state.granularity === "Daily") {
+      newGraphData[3] = 13
+    }
+
+    this.setState({tickFormat: newFormat})
+    this.setState({graphData: newGraphData})
+    this.setState({tickValues: newValues})
   }
 
   capitalize(name) {
@@ -60,30 +106,44 @@ class Location extends Component {
           this.refs.weekly.toggle();
           this.refs.monthly.toggle();
           this.refs.yearly.toggle();
-          this.setState({granularity: "Daily"})
+          this.setState({granularity: "Daily"} , () => { 
+            console.log("Daily hit")
+            this.updateGraph(str)
+          });
         }
 
         if (str === "weekly") {
           this.refs.daily.toggle();
           this.refs.monthly.toggle();
           this.refs.yearly.toggle();
-          this.setState({granularity: "Weekly"})
+          
+          this.setState({granularity: "Weekly"} , () => { 
+            console.log("Weekly hit")
+            this.updateGraph(str)
+          });
         }
 
         if (str === "monthly") {
           this.refs.daily.toggle();
           this.refs.weekly.toggle();
           this.refs.yearly.toggle();
-          this.setState({granularity: "Monthly"})
+
+          this.setState({granularity: "Monthly"}, () => { 
+            console.log("Monthly hit")
+            this.updateGraph(str)
+          });
         }
 
         if (str === "yearly") {
           this.refs.daily.toggle();
           this.refs.weekly.toggle();
           this.refs.monthly.toggle();
-          this.setState({granularity: "Yearly"})
+
+          this.setState({granularity: "Yearly"}, () => { 
+            console.log("Yearly hit")
+            this.updateGraph(str)
+          });
         }
-        // TODO call functions that retrieve daily/weekly/montly/yearly data for graph
   }
 
   onStartingDateChange(date) {
@@ -100,7 +160,7 @@ class Location extends Component {
       this.setState({ count: newCount });
     });
 
-    var buttonStyle = {"display": "flex", "align-items": "center", "justify-content": "center"}
+    var buttonStyle = {"display": "flex", "alignItems": "center", "justifyContent": "center"}
 
     return (
       <div className="container">
@@ -108,10 +168,6 @@ class Location extends Component {
           <h1>{this.state.name}</h1>
           <h1>{this.state.count}</h1>
           <h3>{this.state.granularity} Data from {this.state.startingDate.toLocaleDateString()} to {this.state.endingDate.toLocaleDateString()}</h3>
-        </center>
-        <center>
-          <DatePicker onChange={(date) => this.onStartingDateChange(date)} value={this.state.startingDate}/>
-          <DatePicker onChange={(date) => this.onEndingDateChange(date)} value={this.state.endingDate}/>
         </center>
         <center style={buttonStyle}>
             <Button ref="daily" text="Daily" update={ () => {this.buttonManager("daily") }}></Button>
@@ -126,9 +182,12 @@ class Location extends Component {
             tickFormat={ this.state.tickFormat }/>
           <VictoryAxis dependentAxis/>
           <VictoryLine
-            data={this.state.graphData}
-            interpolation='monotoneX'/>
+            data={this.state.graphData}/>
         </VictoryChart>
+        <center>
+          <DatePicker onChange={(date) => this.onStartingDateChange(date)} value={this.state.startingDate}/>
+          <DatePicker onChange={(date) => this.onEndingDateChange(date)} value={this.state.endingDate}/>
+        </center>
       </div>
     );
   }

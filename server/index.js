@@ -62,6 +62,15 @@ app.get('/count/:location', async (req, res) => {
     res.send(count);
 });
 
+// get the graph data  (EXAMPLE: /data/{"location":"Wollastons", "type":"daily", "startDate":"2015-01-01", "endDate":"2015-02-01"})
+app.get('/data/:graph', async (req, res) => {
+    var graphRequest = JSON.parse(req.params.graph)
+    if(typeof graphRequest.location !== 'undefined' && typeof graphRequest.type !== 'undefined' && typeof graphRequest.startDate !== 'undefined' && typeof graphRequest.endDate !== 'undefined') {
+        var historical = await db.getHistoricalGraphData(graphRequest.location, graphRequest.type, graphRequest.startDate, graphRequest.endDate);
+        res.send(historical);
+       }
+});
+
 // get the list of locations
 app.get('/locations-list', async (req, res) => {
     var locations = await db.getLocations();
